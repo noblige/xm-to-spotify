@@ -5,6 +5,7 @@ from BeautifulSoup import BeautifulSoup
 import json, urllib
 
 client = Http()
+tracks = set()
 
 resp, data = client.request('http://www.dogstarradio.com/search_playlist.php?artist=&title=&channel=264&month=&date=&shour=&sampm=&stz=&ehour=&eampm=')
 
@@ -18,4 +19,7 @@ for s in html('table')[1]('tr')[3:]:
 	if not data['tracks']['items']:
 		continue
 	sa, sn = data['tracks']['items'][0]['artists'][0]['name'], data['tracks']['items'][0]['name']
-	print data['tracks']['items'][0]['uri'], '\t', sa, '-', sn
+	uri = data['tracks']['items'][0]['uri']
+	if uri not in tracks:
+		tracks.add(uri)
+		print uri, '\t', sa, '-', sn
